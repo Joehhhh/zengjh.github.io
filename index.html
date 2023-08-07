@@ -229,6 +229,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://zengjh11.github.io/2023/08/07/20230807-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zengjh's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2023/08/07/20230807-%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%8E%9F%E7%90%86/" itemprop="url">浏览器渲染原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-08-07T14:40:22+08:00">
+                2023-08-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="浏览器渲染原理"><a href="#浏览器渲染原理" class="headerlink" title="浏览器渲染原理"></a>浏览器渲染原理</h1><p>整个渲染过程分为多个阶段，分别是：HTML解析、样式计算、布局、分层、绘制、分块、光栅化、画。</p>
+<ol>
+<li><p>解析HTML,生产dom树和css树。<br> js的解析会阻塞html的解析。<br> css的解析不会阻塞html的解析，因为浏览器会启动一个预解析线程去下载js和css并简单解析css。</p>
+</li>
+<li><p>样式计算<br> 遍历dom树，依次为每个节点计算初最终样式(Computed Style)。<br> 完成之后得到一颗带有样式的dom树。</p>
+</li>
+<li><p>布局<br> 遍历dom树，根据样式算出每个节点的宽高，位置等。<br> 大部分时候得到的layout树和dom树并不是一一对应的。<br> 例：隐藏的节点不会在layout树中。伪元素在dom树里不存在，在layout树中存在。<br> 题外：1.内容必须在行盒中。2.行盒和块盒不能相邻。</p>
+</li>
+<li><p>分层<br> 主线程会使用一套复杂策略对整个布局进行分层。<br> 分层的好处在于将来某一层改变后，仅会对该层进行处理，从而提升效率。<br> 滚动条、堆叠上下文、transform、opacity等样式都会或多或少的影响分层结果。也可通过will-change属性影响分层结果。分层过多也会占用内存，避免滥用。</p>
+</li>
+<li><p>绘制<br> 类似canvas<br> 主线程会为每层单独产生绘制指令集，用于描述单层内容该如何画。</p>
+</li>
+</ol>
+<p>后续渲染会交给其他线程</p>
+<ol start="6">
+<li><p>分块<br> 合成线程对每个层进行分块，将其划分为多个小区域。</p>
+</li>
+<li><p>光栅化<br> 分块完成后，合成线程会将块信息交给GPU进程，以极高的速度完成光栅化。<br> GPU进程会开启多个线程来完成光栅化，并且优先处理靠近视口区域的块。<br> 光栅化的结果就是一块一块的位图。</p>
+</li>
+<li><p>画<br> 合成线程计算出每个位图的位置，交给GPU最终呈现。</p>
+</li>
+</ol>
+<blockquote>
+<p>文章内容取自袁进袁老师的课程</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://zengjh11.github.io/2023/08/03/20230803-JS%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -322,10 +466,12 @@
       
         
           
-            <h2 id="JS事件循环"><a href="#JS事件循环" class="headerlink" title="JS事件循环"></a>JS事件循环</h2><h1 id="什么时JS事件循环？"><a href="#什么时JS事件循环？" class="headerlink" title="什么时JS事件循环？"></a>什么时JS事件循环？</h1><p>JS是单线程的语言，它运行在浏览器的渲染主线程中，而渲染主线程只有一个，不仅仅负责JS解析，还需要解析html,css等。如果使用同步，那极有可能会出现堵塞，造成页面卡死的情况。<br>所以浏览器采用异步的方式，通过添加队列的方式来避免阻塞。<br>在chrome浏览器源码中，开启了一个不会结束的for循环，每次循环从消息队列中取出第一个任务执行，而其他线程只需要在合适的时候将任务加入到队列末尾。<br>过去把消息队列分为宏队列和微队列，如今是一种更灵活多变的方式取代了。<br>根据W3C官方解释，每个任务有不同类型，同类型的任务必须在同一队列，不同的任务可以属于不同的队列。不同的队列有不同的优先级，在一次事件循环中，<br>由浏览器自行决定取哪一个队列的任务。但必须有一个微队列，优先级最高，必须优先调度。</p>
-<h1 id="JS中的计时器能做到准确计时吗？"><a href="#JS中的计时器能做到准确计时吗？" class="headerlink" title="JS中的计时器能做到准确计时吗？"></a>JS中的计时器能做到准确计时吗？</h1><p>不行，因为受事件循环的影响，计时器的回调函数只能在主线程空闲时运行，会带来偏差。</p>
+            <h1 id="JS事件循环"><a href="#JS事件循环" class="headerlink" title="JS事件循环"></a>JS事件循环</h1><h2 id="什么时JS事件循环？"><a href="#什么时JS事件循环？" class="headerlink" title="什么时JS事件循环？"></a>什么时JS事件循环？</h2><p>JS是单线程的语言，它运行在浏览器的渲染主线程中，而渲染主线程只有一个，不仅仅负责JS解析，还需要解析html,css等。如果使用同步，那极有可能会出现堵塞，造成页面卡死的情况。<br>所以浏览器采用异步的方式，通过添加队列的方式来避免阻塞。<br>在chrome浏览器源码中，开启了一个不会结束的for循环，每次循环从消息队列中取出第一个任务执行，而其他线程只需要在合适的时候将任务加入到队列末尾。<br>过去把消息队列分为宏队列和微队列，如今是一种更灵活多变的方式取代了。<br>根据W3C官方解释，每个任务有不同类型，同类型的任务必须在同一队列，不同的任务可以属于不同的队列。不同的队列有不同的优先级，在一次事件循环中，<br>由浏览器自行决定取哪一个队列的任务。但必须有一个微队列，优先级最高，必须优先调度。</p>
+<h2 id="JS中的计时器能做到准确计时吗？"><a href="#JS中的计时器能做到准确计时吗？" class="headerlink" title="JS中的计时器能做到准确计时吗？"></a>JS中的计时器能做到准确计时吗？</h2><p>不行，因为受事件循环的影响，计时器的回调函数只能在主线程空闲时运行，会带来偏差。</p>
 <p>扩展：<br>1.JS调用的操作系统的函数，系统函数本身存在偏差。<br>2.按照w3c的标准，浏览器嵌套层数如果超过5层，则会有4毫秒的最少计时时间，如果少于4毫秒的又会带来4毫秒的偏差。</p>
+<blockquote>
 <p>文章内容取自袁进袁老师的课程</p>
+</blockquote>
 
           
         
@@ -1537,139 +1683,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://zengjh11.github.io/2023/02/05/20230205-REST-API/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="zengjh's Notes">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2023/02/05/20230205-REST-API/" itemprop="url">REST-API</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2023-02-05T09:20:38+08:00">
-                2023-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="REST-API"><a href="#REST-API" class="headerlink" title="REST API"></a>REST API</h1><p>REST API 可以让你看到 URL+Http Method 就知道这个 URL 是干什么的，让你看到了 HTTP 状态码（status code）就知道请求结果如何。</p>
-<ol>
-<li>每一个 URI 代表一种资源。</li>
-<li>客户端和服务器之间，传递资源的某种表现形式比如 json，xml，image,txt 等等。</li>
-<li>客户端通过特定的 HTTP 动词，对服务器端资源进行操作，实现”表现层状态转化”。</li>
-</ol>
-<hr>
-<h2 id="动作"><a href="#动作" class="headerlink" title="动作"></a>动作</h2><ul>
-<li>GET：请求从服务器获取特定资源。</li>
-<li>POST：在服务器上创建一个新的资源。</li>
-<li>PUT：更新服务器上的资源（客户端提供更新后的整个资源）。</li>
-<li>DELETE：从服务器删除特定的资源。</li>
-<li>PATCH：更新服务器上的资源（客户端提供更改的属性，可以看做作是部分更新）。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1720,7 +1733,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
